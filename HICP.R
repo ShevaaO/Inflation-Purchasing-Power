@@ -115,7 +115,7 @@ summary(hicp_final)
 # 4. Outlier check
 # ------------------------------------------------------------
 # We inspect unusually high or low inflation observations.
-# We do not automatically remove them, because high inflation after 2020 is economically meaningful for this project.
+# We do not remove them, because high inflation after 2020 is economically meaningful for this project.
 
 highest_food_inflation <- hicp_final %>%
   arrange(desc(food_inflation)) %>%
@@ -139,6 +139,13 @@ lowest_food_inflation <- hicp_final %>%
   head(10)
 
 lowest_food_inflation
+
+lowest_overall_inflation <- hicp_final %>%
+  arrange(overall_inflation) %>%
+  select(country, year, period, overall_inflation, food_inflation, food_inflation_gap) %>%
+  head(10)
+
+lowest_overall_inflation
 
 # ------------------------------------------------------------
 # 5. Descriptive statistics
@@ -194,7 +201,7 @@ descriptive_stats <- hicp_final %>%
     median_ratio = median(food_overall_ratio[is.finite(food_overall_ratio)], na.rm = TRUE)
   )
 
-descriptive_stats
+print(descriptive_stats, width = Inf)
 
 
 # Main comparison table for the central finding
@@ -212,19 +219,18 @@ period_comparison <- hicp_final %>%
 period_comparison
 
 # ------------------------------------------------------------
-# Main proportional comparison: ratio of average food inflation
-# to average overall inflation
+# Main proportional comparison: ratio of average food inflation to average overall inflation
 # ------------------------------------------------------------
 
 # This is the main comparison for our research question.
-# It compares how large average food inflation was relative to
-# average overall inflation in each period.
+# It compares how large average food inflation was relative to average overall inflation in each period.
 
 proportional_comparison <- hicp_final %>%
   group_by(period) %>%
   summarise(
     avg_overall_inflation = mean(overall_inflation, na.rm = TRUE),
     avg_food_inflation = mean(food_inflation, na.rm = TRUE),
+    avg_food_inflation_gap = mean(food_inflation_gap, na.rm = TRUE),
     food_to_overall_ratio = avg_food_inflation / avg_overall_inflation,
     n = n()
   )
