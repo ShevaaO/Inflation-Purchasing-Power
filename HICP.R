@@ -96,14 +96,7 @@ hicp_final <- hicp_final %>%
     food_inflation_gap = food_inflation - overall_inflation,
     
     # Full ratio, including negative overall inflation
-    food_overall_ratio = food_inflation / overall_inflation,
-    
-    # Safer ratio, only for positive overall inflation
-    food_overall_ratio_positive = ifelse(
-      overall_inflation > 0,
-      food_inflation / overall_inflation,
-      NA
-    )
+    food_overall_ratio = food_inflation / overall_inflation
   )
 
 # Check final dataset
